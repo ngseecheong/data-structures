@@ -1,3 +1,6 @@
+import typing
+
+
 class BinarySearchTree:
     class Node:
 
@@ -10,7 +13,14 @@ class BinarySearchTree:
     def __init__(self):
         self.root = None
 
-    def add_node(self, value: int):
+    def add_node(self, value: typing.Any) -> None:
+        """
+        A function to add values to the tree
+
+        :param value: Any valid object that can be compared using <,>,= or any valid combinations
+        :return: None
+        """
+
         if self.root is None:
             self.root = self.Node(value=value, parent=None)
             return
@@ -30,7 +40,13 @@ class BinarySearchTree:
 
         return internal(self.root, value)
 
-    def traverse(self, reverse=False):
+    def traverse(self, reverse: bool = False) -> typing.Generator:
+        """
+        A generator to traverse the the tree
+
+        :param reverse: low to high (reverse=False) | high to low (reverse=True)
+        :return: generator to traverse
+        """
         def internal(parent):
             if parent is None:
                 return

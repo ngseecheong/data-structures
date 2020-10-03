@@ -13,7 +13,7 @@ class BinarySearchTree:
     def __init__(self):
         self.root = None
 
-    def add_node(self, value: typing.Any) -> None:
+    def add_value(self, value: typing.Any) -> None:
         """
         A function to add values to the tree
 
@@ -62,5 +62,47 @@ class BinarySearchTree:
                 yield from internal(parent.left)
             else:
                 yield from internal(parent.right)
+
+        return internal(self.root)
+
+    def pop_min(self) -> typing.Any:
+        """"
+        Gets the min value and removes it from the tree
+
+        :return: min value
+        """
+        def internal(parent):
+            if parent is None:
+                return None
+
+            if parent.left is None:
+                if parent.parent is None:
+                    self.root = parent.right
+                else:
+                    parent.parent.left = parent.right
+                return parent.value
+            else:
+                return internal(parent.left)
+
+        return internal(self.root)
+
+    def pop_max(self) -> typing.Any:
+        """"
+        Gets the max value and removes it from the tree
+
+        :return: max value
+        """
+        def internal(parent):
+            if parent is None:
+                return None
+
+            if parent.right is None:
+                if parent.parent is None:
+                    self.root = parent.left
+                else:
+                    parent.parent.right = parent.left
+                return parent.value
+            else:
+                return internal(parent.right)
 
         return internal(self.root)

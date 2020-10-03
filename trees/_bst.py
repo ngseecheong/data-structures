@@ -66,7 +66,7 @@ class BinarySearchTree:
         return internal(self.root)
 
     def pop_min(self) -> typing.Any:
-        """"
+        """
         Gets the min value and removes it from the tree
 
         :return: min value
@@ -87,7 +87,7 @@ class BinarySearchTree:
         return internal(self.root)
 
     def pop_max(self) -> typing.Any:
-        """"
+        """
         Gets the max value and removes it from the tree
 
         :return: max value

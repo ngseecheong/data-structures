@@ -15,10 +15,13 @@ class BinarySearchTree:
             self.value: Optional[BinarySearchTree.Node] = value
             self.subtree: Optional[BinarySearchTree.SubTree] = subtree
 
+        def __str__(self):
+            return str(self.value)
+
     def __init__(self):
         self.root: Optional[BinarySearchTree.Node] = None
 
-    def add_value(self, value: Any) -> None:
+    def add_value(self, value: Any) -> Node:
         """
         A function to add values to the tree
 
@@ -28,27 +31,27 @@ class BinarySearchTree:
 
         if self.root is None:
             self.root = BinarySearchTree.Node(value=value)
-            return
+            self.root.subtree = BinarySearchTree.SubTree(min_=self.root)
+            return self.root
 
         def internal(parent, value_):
-            if parent.subtree is None:
-                parent.subtree = BinarySearchTree.SubTree(min_=parent)
-
             if value_ <= parent.value:
                 if parent.left is None:
                     new_node = BinarySearchTree.Node(value_, parent, parent.subtree)
                     new_node.subtree.min = new_node
                     parent.left = new_node
+                    return new_node
                 else:
-                    internal(parent.left, value_)
+                    return internal(parent.left, value_)
 
             if parent.value < value_:
                 if parent.right is None:
                     new_node = self.Node(value_, parent, subtree=BinarySearchTree.SubTree())
                     new_node.subtree.min = new_node
                     parent.right = new_node
+                    return new_node
                 else:
-                    internal(parent.right, value_)
+                    return internal(parent.right, value_)
 
         return internal(self.root, value)
 
@@ -77,27 +80,48 @@ class BinarySearchTree:
 
         return internal(self.root)
 
+    def pop_min_at_parent(self, parent: Node):
+        if parent is None:
+            return None
+
+        min_node: BinarySearchTree.Node = parent.subtree.min
+
+        # Special case. We are at root. Which has no parents
+        if min_node.parent is None:
+            self.root = min_node.right
+        else:
+            # Min node has no successor on right, since this would be left most node in subtree
+            # So we set the parent as min
+            if min_node.right is None:
+                min_node.parent.left = None
+                min_node.parent.subtree.min = min_node.parent  # Cyclic
+            else:
+                # We have a right successor.
+                if min_node.parent.left is min_node:
+                    min_node.parent.left = min_node.right
+                else:
+                    min_node.parent.right = min_node.right
+                min_node.right.parent = min_node.parent
+                min_node.parent.subtree.min = min_node.right
+
+        min_node.parent = None
+        min_node.left = None
+        min_node.right = None
+        min_node.subtree = None
+
+        value = min_node.value
+        del min_node
+
+        return value
+
     def pop_min(self) -> Any:
         """
         Gets the min value and removes it from the tree. O(1)
 
         :return: min value
         """
-        min_node = self.root.subtree.min
 
-        if min_node.parent is None:
-            self.root = min_node.right
-            self.root.parent = None
-        else:
-            if min_node.right is None:
-                min_node.parent.left = None
-                self.root.subtree.min = min_node.parent
-            else:
-                min_node.parent.left = min_node.right
-                min_node.right.parent = min_node.parent
-                self.root.subtree.min = min_node.right
-
-        return min_node.value
+        return self.pop_min_at_parent(self.root)
 
     def pop_max(self) -> Any:
         """

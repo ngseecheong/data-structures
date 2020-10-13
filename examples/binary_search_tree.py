@@ -9,7 +9,7 @@ if __name__ == '__main__':
     bst.add_value(1)
     bst.add_value(20)
     bst.add_value(24)
-    bst.add_value(25)
+    a = bst.add_value(25)
     bst.add_value(26)
     bst.add_value(7)
     bst.add_value(4)
@@ -18,6 +18,8 @@ if __name__ == '__main__':
     bst.add_value(23)
     bst.add_value(21)
     bst.add_value(22)
+
+    print(bst.pop_min_at_parent(a))
 
     print(bst.pop_min())
     print(bst.pop_min())

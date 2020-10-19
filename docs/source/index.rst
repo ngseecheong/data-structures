@@ -16,6 +16,12 @@ Trees
    :members:
 
 
+Linear
+======
+.. autoclass:: linear.LinkedList
+   :members:
+
+
 Indices and tables
 ==================
 
